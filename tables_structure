@@ -1,0 +1,30 @@
+CREATE TABLE Account (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    key TEXT UNIQUE,
+    secret TEXT,
+    currency TEXT,
+    funds REAL
+)
+
+CREATE TABLE Transactions (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    symbol TEXT,
+    operation INTEGER,
+    lastPrice REAL,
+    transactionHash TEXT,
+    transactionId INTEGER,
+    targetPrice REAL,
+    active INTEGER
+)
+
+CREATE TABLE State (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    symbol TEXT UNIQUE,
+    lastPrice REAL,
+    lastUpdate TEXT,
+    stake REAL,
+    buyVariation REAL,
+    sellVariation REAL,
+    accumulate REAL,
+    active INTEGER
+)
