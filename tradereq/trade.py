@@ -1,5 +1,6 @@
 from binance.client import Client
 from settings import settings
+from datetime import datetime, timedelta
 
 binance_client = Client(settings.api_key, settings.api_secret)
 
@@ -76,3 +77,6 @@ def performPurchase(coin, currentPrice, availFunds):
 	print("%s %f Buy now! @ %f" %(coin[1], stake, currentPrice))
 	order = createBuyOrder(coin[1], stake, currentPrice)
 	return order
+
+def getCandles(symbol, interval='1d', limit=200):
+	return binance_client.get_klines(symbol=symbol, interval=interval, limit=limit)
