@@ -18,5 +18,5 @@ def perform(coin, availFunds, currentPrice):
 			targetPrice = currentPrice + ((currentPrice/100) * coin[6])
 			dbop.createTransacrtion(coin[1], "BUY", currentPrice, order["orderId"], order["clientOrderId"], 1, targetPrice)
 		except Exception as ex:
-			email.sendErrorEmail(str(ex), 'Error')
+			email.sendEmailAlert(str(ex), 'Error')
 			print(ex)

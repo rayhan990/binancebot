@@ -29,7 +29,7 @@ def checkCoins(sc):
 		checkPreviousSellTransactions()
 	except Exception as ex:
 		print(ex)
-		# email.sendErrorEmail(str(ex), 'Error')
+		email.sendEmailAlert(str(ex), 'Error')
 
 	s.enter(settings.INTERVAL, 1, checkCoins, (sc,))
 		
@@ -51,7 +51,7 @@ def checkPreviousSellTransactions():
 		
 		if order["status"]=="FILLED":
 			msg = "Sold %s @ %.2f" %(transaction[1], transaction[6])
-			email.sendErrorEmail(msg, 'Sell')
+			email.sendEmailAlert(msg, 'Sell')
 			print(msg)
 			dbop.updateTransaction(transaction[0])
 

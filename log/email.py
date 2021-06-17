@@ -5,7 +5,7 @@ import smtplib
 from email.message import EmailMessage
 from settings import settings
 
-def sendErrorEmail(message, subject):
+def sendEmailAlert(message, subject):
     try:
         msg = EmailMessage()
         msg.set_content(message)

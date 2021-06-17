@@ -58,7 +58,7 @@ def getCryptos():
 
         return res
     except Exception as ex:
-        sendErrorEmail(str(ex))
+        sendEmailAlert(str(ex))
         return []
     finally:
         if con:
