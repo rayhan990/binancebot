@@ -12,6 +12,7 @@ def getAvailableFunds(asset):
 	return float(fund['free'])
 
 def createBuyOrder(symbol, quantity, price):
+	print(quantity)
 	order = binance_client.create_order(
 		symbol=symbol,
 		side=binance_client.SIDE_BUY,
@@ -60,16 +61,17 @@ def getOrder(orderId, symbol):
 	return order
 
 def performPurchase(coin, currentPrice, availFunds):
-	stake = round(((availFunds/100) * coin[4])/currentPrice, 2)
+	stakeAmount = (availFunds/100) * coin[4]
+	if stakeAmount<settings.MIN_BALANCE:
+		stakeAmount = settings.MIN_BALANCE
 
-	if ((availFunds/100) * coin[4])<10:
-		stake = round((availFunds)/currentPrice, 2)
+	stake = round(stakeAmount/currentPrice, 2)
 
 	if stake==0:
-		stake = round(((availFunds/100) * coin[4])/currentPrice, 3)
+		stake = round(stakeAmount/currentPrice, 3)
 
 	if stake>1:
-		stake = int(((availFunds/100) * coin[4])/currentPrice)
+		stake = round(stakeAmount/currentPrice, 1)
 
 	print("%s %f Buy now! @ %f" %(coin[1], stake, currentPrice))
 	order = createBuyOrder(coin[1], stake, currentPrice)

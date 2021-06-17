@@ -29,7 +29,7 @@ def checkCoins(sc):
 		checkPreviousSellTransactions()
 	except Exception as ex:
 		print(ex)
-		email.sendErrorEmail(str(ex), 'Error')
+		# email.sendErrorEmail(str(ex), 'Error')
 
 	s.enter(settings.INTERVAL, 1, checkCoins, (sc,))
 		

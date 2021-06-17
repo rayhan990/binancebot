@@ -188,3 +188,20 @@ def createAccount(key, secret, baseCurrency):
     finally:
         if con:
             con.close()
+
+def countOutstandingOrders(coin, operation):
+    con = sl.connect('./db/mydb.db')
+    cur = con.cursor()
+
+    try:
+        stmt = "select count(*) from Transactions WHERE active=1 AND symbol='%s' AND operation='%s'" %(coin,operation)
+        cur.execute(stmt)
+        res = cur.fetchall()
+
+        return res[0][0]
+    except Exception as ex:
+        print(ex)
+        return []
+    finally:
+        if con:
+            con.close()

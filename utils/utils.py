@@ -1,8 +1,11 @@
 from settings import settings
+from db import dbop
 
 def isTradeAllowed(coin, availFunds):
-	canTrade = True
 	if(availFunds<settings.MIN_BALANCE):
-		canTrade = False
+		return False
 
-	return canTrade
+	if dbop.countOutstandingOrders(coin[1], 'SELL')>=2:
+		return False
+
+	return True
