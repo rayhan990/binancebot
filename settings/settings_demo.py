@@ -1,0 +1,11 @@
+INTERVAL = 10
+MIN_BALANCE = 10
+api_secret="your_api_secret_here"
+api_key="your_api_key_here"
+error_log_email_sender="your_sender_email"
+error_log_email_receiver="your_receiver_email"
+smtp_server="your_smtp_server"
+smtp_port=25
+smtp_user="your_smtp_uesrname"
+smtp_pass="your_smtp_pass"
+enable_email=True

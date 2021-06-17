@@ -6,6 +6,9 @@ from email.message import EmailMessage
 from settings import settings
 
 def sendEmailAlert(message, subject):
+    if enable_email==False:
+        return
+        
     try:
         msg = EmailMessage()
         msg.set_content(message)
