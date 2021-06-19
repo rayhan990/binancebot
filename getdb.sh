@@ -1,0 +1,1 @@
+scp.exe rayhan@185.132.37.225:/home/rayhan/highlow/db/mydb.db ./db/mydb.db
