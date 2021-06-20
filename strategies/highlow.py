@@ -10,13 +10,13 @@ def perform(coin, availFunds, currentPrice):
 	if(currentPrice>coin[2]):
 		dbop.updateState(coin[1], currentPrice)
 
-	if check(coin, currentPrice):
-		try:
-			order = trade.performPurchase(coin, currentPrice, availFunds)
-			dbop.updateState(coin[1], currentPrice)
+	# if check(coin, currentPrice):
+	try:
+		order = trade.performPurchase(coin, currentPrice, availFunds)
+		dbop.updateState(coin[1], currentPrice)
 
-			targetPrice = currentPrice + ((currentPrice/100) * coin[6])
-			dbop.createTransacrtion(coin[1], "BUY", currentPrice, order["orderId"], order["clientOrderId"], 1, targetPrice)
-		except Exception as ex:
-			email.sendEmailAlert(str(ex), 'Error')
-			print(ex)
+		targetPrice = currentPrice + ((currentPrice/100) * coin[6])
+		dbop.createTransacrtion(coin[1], "BUY", currentPrice, order["orderId"], order["clientOrderId"], 1, targetPrice)
+	except Exception as ex:
+		email.sendEmailAlert(str(ex), 'Error')
+		print(ex)

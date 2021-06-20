@@ -32,5 +32,5 @@ class Sup_Res_Finder:
 			
 				if np.sum([abs(l-x) < s  for x in levels]) == 0:
 					levels.append((i,l))
-					
+
 		return levels
