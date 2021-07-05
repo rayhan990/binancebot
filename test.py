@@ -1,38 +1,45 @@
-# https://www.youtube.com/watch?v=QdbKApfwF-g
-
-# https://www.youtube.com/watch?v=4dVB_g5YeSE&t=703s
-
-from strategies import PriceAction
-from tradereq import trade
-import pandas_ta as ta
-import pandas as pd
+from db import dbop
 from utils import utils
-import datetime
-
-# def 
-coin = 'BTCUSDT'
-candles = trade.getCandles(coin)
-currentPrice = trade.getCurrentPrice(coin)
-
-candles = trade.getCandles(coin, interval='1d')
-rsi = ta.momentum.rsi(candles['High'], additionalData=candles['Close_time'])
-print(rsi)
-
-hlws = utils.getHighsAndLows(candles['Low'], additionalData=candles['Close_time'])
-rsihlws = utils.getHighsAndLows(rsi)
-
-Enter = False
-PrevVal = 0
-for (x,y, z, j, s) in zip(hlws['Type'], rsihlws['Type'], hlws['AdditionalData'], hlws['Price'], rsihlws['Price']):
-	if Enter:
-		Enter = False
-		print("Exiting @ %s %s %s %f" %(z, j, s, (100*(float(j)-float(PrevVal)))/float(PrevVal)))
-	if x=='L' and y=='H':
-		print("Entering @ ", z, j)
-		PrevVal = j
-		Enter = True
+from tradereq import futures
+from strategies import BounceFromKeyLevel
+from strategies import SupResBounceRsiDivergence
 
 
-# print(x)
+future_client = futures.Futures();
+futuresexchange = future_client.getExchange()
 
-# print(hlws.compare(rsihlws))
+coins = dbop.getCryptos()
+
+for coin in coins:
+	availFunds = float(future_client.getAvailableFunds('USDT')['balance'])
+	# Strategies
+	supResBounceRsiDivergence = SupResBounceRsiDivergence.SupResBounceRsiDivergence(future_client, coin, '1d', '15m')
+	bounceFromKeyLevel = BounceFromKeyLevel.BounceFromKeyLevel(future_client, coin, '1d')
+
+	strategies = [
+		{
+			'name' : 'SuppResBounceRsiDivergence',
+			'strategyInstance' : supResBounceRsiDivergence
+		},
+		{
+			'name' : 'default',
+			'strategyInstance' : bounceFromKeyLevel
+		}
+	]
+
+	currentPrice = future_client.getCurrentPrice(coin[1])
+	stake = utils.calculateStake(availFunds, currentPrice, coin[4])
+
+	for strategy in strategies:
+		isTreadingAllowed = utils.isTradeAllowed(coin[1], availFunds, strategy['name'])
+		if isTreadingAllowed:
+			result = strategy['strategyInstance'].check()
+
+			if result['type']=='L':
+				print("Long with %s" %strategy['name'])
+				order = futures.createBuyOrder(coin[1], coin[1], currentPrice)
+				registerPuchase(order, currentPrice, strategy['name'])
+			if result['type']=='S':
+				print("Shorting with %s" %strategy['name'])
+				order = futures.createSellOrder(coin[1], coin[1],currentPrice)
+				registerPuchase(order, currentPrice, strategy['name'])

@@ -8,7 +8,11 @@ dbop.createState("BTCUSDT", 20, 5, 4)
 dbop.createState("BNBUSDT", 20, 5, 4)
 dbop.createState("ADAUSDT", 10, 5, 5)
 dbop.createState("XRPUSDT", 5, 5, 5)
-dbop.createState("DOGEUSDT", 5, 5, 5)
+dbop.createState("MATICUSDT", 10, 5, 5)
+dbop.createState("DOTUSDT", 10, 5, 5)
+dbop.createState("SOLUSDT", 5, 5, 5)
+dbop.createState("LINKUSDT", 5, 5, 5)
+
 
 
 api_key=settings.api_key

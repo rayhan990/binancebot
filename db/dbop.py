@@ -26,7 +26,8 @@ def createDb():
                 transactionHash TEXT,
                 transactionId INTEGER,
                 targetPrice REAL,
-                active INTEGER
+                active INTEGER,
+                strategy TEXT
             );
         """)
 
@@ -97,13 +98,13 @@ def getAccountInfo(id):
         if con:
             con.close()
 
-def createTransacrtion(symbol, operation, lastPrice, transactionId, transactionHash, active, targetPrice):
+def createTransacrtion(symbol, operation, lastPrice, transactionId, transactionHash, active, targetPrice, strategy='default'):
     con = sl.connect('./db/mydb.db')
     cur = con.cursor()
 
     stmt = """
-        INSERT INTO Transactions (symbol, operation, lastPrice, active, transactionId, transactionHash, targetPrice) 
-        VALUES ('%s', '%s', %f, %d, %d, '%s', %f)""" %(symbol, operation, lastPrice, active, transactionId, transactionHash, targetPrice)
+        INSERT INTO Transactions (symbol, operation, lastPrice, active, transactionId, transactionHash, targetPrice, strategy) 
+        VALUES ('%s', '%s', %f, %d, %d, '%s', %f)""" %(symbol, operation, lastPrice, active, transactionId, transactionHash, targetPrice, strategy)
 
     try:
         con.execute(stmt)
@@ -189,12 +190,12 @@ def createAccount(key, secret, baseCurrency):
         if con:
             con.close()
 
-def countOutstandingOrders(coin, operation):
+def countOutstandingOrders(symbol, strategy):
     con = sl.connect('./db/mydb.db')
     cur = con.cursor()
 
     try:
-        stmt = "select count(*) from Transactions WHERE active=1 AND symbol='%s' AND operation='%s'" %(coin,operation)
+        stmt = "select count(*) from Transactions WHERE active=1 AND symbol='%s' AND strategy='%s'" %(symbol, strategy)
         cur.execute(stmt)
         res = cur.fetchall()
 

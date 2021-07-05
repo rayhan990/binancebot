@@ -15,7 +15,6 @@ def getAvailableFunds(asset):
 	return float(fund['free'])
 
 def createBuyOrder(symbol, quantity, price):
-	print(quantity)
 	order = binance_client.create_order(
 		symbol=symbol,
 		side=binance_client.SIDE_BUY,

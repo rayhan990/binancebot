@@ -23,7 +23,7 @@ class Sup_Res_Finder:
 		for i in range(2, df.shape[0]-2):
 			if self.isSupport(df,i):
 				l = df['Low'][i]
-			
+
 				if np.sum([abs(l-x) < s  for x in levels]) == 0:
 					levels.append((i,l))
 			
