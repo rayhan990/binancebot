@@ -70,6 +70,10 @@ class Futures:
 
 		return order
 
+	def fixLeverage(self, symbol, leverage):
+		self.binance_client.futures_change_leverage(symbol=symbol, leverage=leverage)
+		pass
+
 	def get24Avg(self, symbol):
 		ticker = self.binance_client.futures_ticker(symbol=symbol)
 		return float(ticker['weightedAvgPrice'])

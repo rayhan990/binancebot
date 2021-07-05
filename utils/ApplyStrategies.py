@@ -14,6 +14,8 @@ def applyStrategies(baseCurrency):
 	results = []
 
 	for coin in coins:
+		future_client.fixLeverage(coin[1], 1)
+		future_client.getAvailableFunds(baseCurrency)
 		availFunds = float(future_client.getAvailableFunds(baseCurrency)['balance'])
 		# Strategies
 		supResBounceRsiDivergence = SupResBounceRsiDivergence.SupResBounceRsiDivergence(future_client, coin, '1d', '15m')

@@ -102,9 +102,11 @@ def createTransacrtion(symbol, operation, lastPrice, transactionId, transactionH
     con = sl.connect('./db/mydb.db')
     cur = con.cursor()
 
+    print(symbol, operation, lastPrice, active, transactionId, transactionHash, targetPrice, strategy)
+
     stmt = """
         INSERT INTO Transactions (symbol, operation, lastPrice, active, transactionId, transactionHash, targetPrice, strategy) 
-        VALUES ('%s', '%s', %f, %d, %d, '%s', %f)""" %(symbol, operation, lastPrice, active, transactionId, transactionHash, targetPrice, strategy)
+        VALUES ('%s', '%s', %f, %d, %d, '%s', %f, '%s')""" %(symbol, operation, lastPrice, active, transactionId, transactionHash, targetPrice, strategy)
 
     try:
         con.execute(stmt)
