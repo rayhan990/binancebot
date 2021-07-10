@@ -51,20 +51,26 @@ def applyStrategies(baseCurrency):
 
 def checkPreviousBuyTransactions():
 	for transaction in dbop.getTransactions("BUY"):
-		order = trade.getOrder(transaction[5], transaction[1])
-		targetPrice = round(transaction[6], 2)
-		
-		if order["status"]=="FILLED":
-			print("Selling %s @ %.2f" %(transaction[1], targetPrice))
-			dbop.updateTransaction(transaction[0])
-			order = trade.createSellOrder(transaction[1], order["executedQty"], targetPrice)
-			dbop.createTransacrtion(transaction[1], "SELL", targetPrice, order["orderId"], order["clientOrderId"], 1, targetPrice)
+		try:
+			order = trade.getOrder(transaction[5], transaction[1])
+			targetPrice = round(transaction[6], 2)
+			
+			if order["status"]=="FILLED":
+				print("Selling %s @ %.2f" %(transaction[1], targetPrice))
+				dbop.updateTransaction(transaction[0])
+				order = trade.createSellOrder(transaction[1], order["executedQty"], targetPrice)
+				dbop.createTransacrtion(transaction[1], "SELL", targetPrice, order["orderId"], order["clientOrderId"], 1, targetPrice)
+		except Exception as ex:
+			print(ex)
 
 def checkPreviousSellTransactions():
 	for transaction in dbop.getTransactions("SELL"):
-		order = trade.getOrder(transaction[5], transaction[1])
-		
-		if order["status"]=="FILLED":
-			msg = "Sold %s @ %.2f" %(transaction[1], transaction[6])
-			email.sendEmailAlert(msg, 'Sell')
-			dbop.updateTransaction(transaction[0])
+		try:
+			order = trade.getOrder(transaction[5], transaction[1])
+			
+			if order["status"]=="FILLED":
+				msg = "Sold %s @ %.2f" %(transaction[1], transaction[6])
+				email.sendEmailAlert(msg, 'Sell')
+				dbop.updateTransaction(transaction[0])
+		except Exception as ex:
+			print(ex)
